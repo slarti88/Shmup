@@ -3,8 +3,8 @@ num_frames 12
 
 
 time 00000:  position ( -1.6, 0.8 ,-1.6) lookat (0.0, -1.10  ,-0.1)	upVector (0,1,0.1)
-time 03000:  position ( -1.6, 0.8 ,-1.6) lookat (0.0, -1.10  ,-0.1)	upVector (0,1,0.1)
-time 07000:  position ( -1.1, 0.65 ,-1.2) lookat (0.0,-0.5,0.0)	upVector (0,1,0)
+time 00300:  position ( -1.6, 0.8 ,-1.6) lookat (0.0, -1.10  ,-0.1)	upVector (0,1,0.1)
+time 00700:  position ( -1.1, 0.65 ,-1.2) lookat (0.0,-0.5,0.0)	upVector (0,1,0)
 time 12000:  position ( 1, 0.5 ,-1) lookat (0.0,-0.5,0.0)	upVector (0,1,0)
 time 17000:  position ( 0, 3 ,0) lookat (0.0,0,0.0)	upVector (0,0,-1)
 time 22000:  position ( 0, 2 ,0) lookat (0.0,0,0.0)	upVector (1,0,0)

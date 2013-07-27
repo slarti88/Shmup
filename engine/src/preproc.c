@@ -592,7 +592,7 @@ void PREPROC_ExpandCameraWayPoints(prec_camera_frame_t* startFrame,prec_camera_f
 		interpolationFactor = (newFrame->time - startFrame->time) / (float)timeDifference;
 		PREPROC_InterpolateFrames(startFrame,endFrame,interpolationFactor,newFrame->position,newFrame->orientation);
 		
-		Log_Printf("Expanded frame t=%d\n",newFrame->time);
+		//Log_Printf("Expanded frame t=%d\n",newFrame->time);
 		
 		currentFrame = newFrame;
 		extraAccuracyTimeStep += 0.6666667f;
@@ -1506,10 +1506,6 @@ void PREPROC_ConvertCp1Tocp2b(char* cpFilename, char* cp2bFilename, char* logFil
 		currentFrame= nextAfterExpansion;
 	}
 		
-		
-	
-	
-	
 	// Mark pre_camera_frame_t key 
 	numFrameBetweenKey  = KEY_FRAME_INTERVAL_MS / 16.6666667f ;
 	frameCounter=numFrameBetweenKey;
@@ -1531,11 +1527,6 @@ void PREPROC_ConvertCp1Tocp2b(char* cpFilename, char* cp2bFilename, char* logFil
 		currentFrame = currentFrame->next;
 	}
 	
-	
-	
-	
-	
-		
 	currentFrame = rootFrame;
 	prevFrame = NULL;
 	

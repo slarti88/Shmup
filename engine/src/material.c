@@ -435,10 +435,6 @@ void MATLIB_MakeAvailable(material_t* material)
 		if (
 			material->textures[TEXTURE_SPECULAR].format == GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG || 
 			material->textures[TEXTURE_SPECULAR].format == GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG)
-			material->hasAlpha = 1;
-		
+			material->hasAlpha = 1;		
 	}
-	
-
-	
 }

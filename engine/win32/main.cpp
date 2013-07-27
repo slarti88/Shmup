@@ -204,7 +204,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	engineParameters |= GL_11_RENDERER ;
 		
 	renderer.statsEnabled = 0;
-	renderer.materialQuality = MATERIAL_QUALITY_LOW;
+	renderer.materialQuality = MATERIAL_QUALITY_HIGH;
 
    
     renderer.glBuffersDimensions[WIDTH] = WIN32_WINDOWS_WIDTH;

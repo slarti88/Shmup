@@ -483,6 +483,7 @@ static void RenderEntityF(entity_t* entity)
 		
 	}
 	
+	// This is where the matrix gets multiplied to the original vertices thus moving the entitiy around the screen
 	glMultMatrixf(entity->matrix);
 	
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, entity->material->shininess);
@@ -538,7 +539,6 @@ static void RenderEntityF(entity_t* entity)
 	}
 
     
-    
 	if (entity->usage == ENT_PARTIAL_DRAW)
 	{
 		
@@ -591,7 +591,7 @@ void RenderEntitiesF(void)
 	enemy_t* enemy;
 	
 	//Log_Printf("Starting rendering frame, t=%d.\n",simulationTime);
-
+	//Log_Printf("Num background entities %d \n",numBackgroundEntities);
 
 	
 	
@@ -636,7 +636,7 @@ void RenderEntitiesF(void)
 		glFogf(GL_FOG_END, renderer.fogStopAt);				// Fog End Depth
 	}
 	
-	
+	// Initial image is also drawn from here
 	
 	for(i=numBackgroundEntities; i < num_map_entities; i++)
 	{
@@ -647,6 +647,7 @@ void RenderEntitiesF(void)
 		
 		RenderEntityF(entity);
 	}
+	
 	glEnable(GL_CULL_FACE);
 	
 	
@@ -668,8 +669,6 @@ void RenderEntitiesF(void)
 	while (enemy != NULL) 
 	{
 		entity = &enemy->entity;
-		
-		
 		
 		if (enemy->shouldFlicker)
 		{

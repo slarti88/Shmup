@@ -902,6 +902,7 @@ void MENU_Render(void)
 	
 	//First draw all images in the menu
 	//Log_Printf("Menu has %d images.\n",currentMenu->numImages);
+
 	for (i=0; i < currentMenu->numImages; i++) 
 	{
 		image = &currentMenu->images[i];

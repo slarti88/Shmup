@@ -660,6 +660,7 @@ void World_OpenScene(char* filename)
 void World_Update(void)
 {
 	//simulationTime = 25000;
+
 	if (light.attachedToCamera)
 	{
 		//light.position = camera.position + camera.right * 5;
@@ -668,8 +669,8 @@ void World_Update(void)
 		vectorAdd(camera.position,light.position,light.position);
 		
 		//light.lookAt = camera.forward * 10;
-		vectorCopy(camera.forward,light.lookAt);
-		vectorScale(light.lookAt,100,light.lookAt);
+		//vectorCopy(camera.forward,light.lookAt);
+		//vectorScale(light.lookAt,100,light.lookAt);
 		
 		vectorCopy(camera.up,light.upVector);
 		

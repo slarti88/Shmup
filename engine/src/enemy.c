@@ -324,6 +324,7 @@ void ENE_Update(void)
 			entity->matrix[14] = translationTransform[Z] ;
 		
 			enemy->timeCounter += timediff;
+			//Log_Printf("timecounter %d ttl %d \n",enemy->timeCounter,enemy->ttl);
 		
 			enemy = enemy->next;
 		}	
@@ -350,17 +351,11 @@ void updateHAB(enemy_t* enemy)
 		//As a devil is seen from above, the roll is actually a rotatiom around Y.
 		enemy->entity.zAxisRot = (1-f)*enemy->entity.zAxisRot;
 	
-		
 		return;
 	}
 	
-	
-	
-	
 	//ON screen and battle
 	enemy->entity.zAxisRot = 0 ;
-	
-	
 	
 	if (enemy->timeCounter > DEVIL_TIME_ONSCREEN)
 	{

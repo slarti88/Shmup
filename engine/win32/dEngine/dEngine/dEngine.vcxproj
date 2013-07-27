@@ -47,7 +47,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\opt\cygwin\home\SanglardFa\devIL\include;C:\opt\cygwin\home\SanglardFa\OGLES_WINDOWS_X86EMULATION_2.09.29.0649\Builds\OGLES\Include;C:\opt\cygwin\home\SanglardFa\OpenAL 1.1 SDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\sid\software\games\devil\include;C:\Program Files\ARM\Mali Developer Tools\OpenGL ES Emulator v1.3.0\include;C:\Program Files\OpenAL 1.1 SDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -60,7 +60,7 @@
     <Link>
       <AdditionalDependencies>Winmm.lib;libgles_cm.lib;DevIL.lib;ILU.lib;ILUT.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\..\..\ShmupDebug.exe</OutputFile>
-      <AdditionalLibraryDirectories>C:\opt\cygwin\home\SanglardFa\devIL\lib\;C:\opt\cygwin\home\SanglardFa\OGLES_WINDOWS_X86EMULATION_2.09.29.0649\Builds\OGLES\WindowsX86\Lib;"C:\opt\cygwin\home\SanglardFa\OpenAL 1.1 SDK\libs\Win32";%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\sid\software\games\devil\lib;C:\Program Files\ARM\Mali Developer Tools\OpenGL ES Emulator v1.3.0\lib;C:\Program Files\OpenAL 1.1 SDK\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>

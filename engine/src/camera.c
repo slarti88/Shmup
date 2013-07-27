@@ -113,6 +113,8 @@ void CAM_Update(void)
 	{
 		//Update vis_set if not already done, take into account key frame_update
 		//Log_Printf("Jumping into vis_update().\n");
+
+		// Updates the scene behind the players and enemies
 		VIS_Update();
 		
 		toDelete = camera.currentFrame;
@@ -352,6 +354,9 @@ void CAM_LoadPath(void)
 	
 	cameraVisMemSize = 0;
 	
+	Log_Printf("camera pathfilename %s \n",camera.pathFilename);
+	
+
 	if (camera.pathFilename[0] == '\0')
 	{
 		Log_Printf("[CAM_LoadPath] No camera path loaded. Aborting.");

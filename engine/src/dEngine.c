@@ -338,8 +338,10 @@ void dEngine_Init(void)
 	engine.musicStartAt = 0;
 	engine.playback.filename[0] = '\0';
 	
-	engine.soundEnabled = 1;
-	engine.musicEnabled = 1;
+	// Enable/disable sounds here
+	engine.soundEnabled = 0;
+	engine.musicEnabled = 0;
+
 	engine.gameCenterEnabled = 0;
 	
 	ENPAR_Init();
@@ -362,7 +364,7 @@ void dEngine_Init(void)
 	
 	ENE_Mem_Init();
 	
-	SND_Init();
+	//SND_Init();
 	
 	
 	MENU_Init();
@@ -427,8 +429,8 @@ void dEngine_LoadScene(int sceneId)
 	
 	if (engine.musicFilename[0] != '\0')
 	{
-		SND_InitSoundTrack(engine.musicFilename,engine.musicStartAt);
-		SND_StartSoundTrack();
+		//SND_InitSoundTrack(engine.musicFilename,engine.musicStartAt);
+		//SND_StartSoundTrack();
 	}
 	
 	
@@ -632,8 +634,6 @@ void dEngine_HostFrame(void)
 	FX_UpdateParticules();
 	FX_UpdateSmoke();
 
-	
-
 	//Rendition
 	P_PrepareBulletSprites();
 	P_PrepareGhostSprites();
@@ -641,8 +641,6 @@ void dEngine_HostFrame(void)
 	P_PreparePointerSprites();
 	
 	SCR_RenderFrame();
-	
-	
 	
 	if (engine.menuVisible)
 		MENU_HandleTouches();

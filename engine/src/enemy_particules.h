@@ -30,7 +30,7 @@
 #include "math.h"
 #include "fx.h"
 
-#define MAX_NUM_ENEMY_PARTICULES 512
+#define MAX_NUM_ENEMY_PARTICULES 256
 #define MAX_NUM_ENEMY_PARTICULES_INDICES (MAX_NUM_ENEMY_PARTICULES*4*6)
 typedef struct enemy_part_t
 {
@@ -61,11 +61,6 @@ typedef struct enemy_particule_lib_t
 } enemy_particule_lib_t ;
 
 extern enemy_particule_lib_t partLib;
-
-
-
-
-
 
 //Enemy fxs
 #define MAX_NUM_ENEMY_FX 64

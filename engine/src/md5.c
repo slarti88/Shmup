@@ -344,8 +344,6 @@ void MD5_ReadMesh(md5_mesh_t* mesh)
 				//Log_Printf("MD5 Read weight: Boneid[%d] f[%.2f]  boneSpace[%.2f,%.2f,%.2f]\n",weight->boneId,weight->bias,weight->boneSpacePos[0],weight->boneSpacePos[1],weight->boneSpacePos[2]);
 			}
 		}
-		
-	
 	}
 	
 }

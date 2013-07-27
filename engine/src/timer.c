@@ -89,13 +89,8 @@ int frameCounter=0;
 float extraPrecision=0;
 void Timer_tick(void)
 {
-	//Log_Printf("t=%d\n",simulationTime);
-	
 	if (paused)
 		return;
-	
-	
-	
 	
 	lastTime = currentTime;
 	currentTime = E_Sys_Milliseconds();
@@ -116,8 +111,11 @@ void Timer_tick(void)
 	timediff = 16;
 	simulationTime += timediff;
 	*/
+
 	if (engine.mode == DE_MODE_SINGLEPLAYER)
 	{
+		// This makes the single player game play much smoother and gives higher fps
+		// Because main.cpp uses this timediff to sleep. So we essentially fix frame rate at 60 fps
 		extraPrecision += 0.6666667f;
 		timediff =16+(int)extraPrecision;
 		extraPrecision -= timediff-16;

@@ -147,8 +147,6 @@ void ENPAR_Update(void)
 		currParticule = &partLib.particules[i];
 		currParticule->ttl -= timediff;
 		
-		
-		
 		//Update vertices position normaly with speed
 		interpolation = 1- currParticule->ttl / currParticule->originalTTL ;
 		

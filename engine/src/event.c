@@ -525,22 +525,22 @@ void EV_ReadEnemiesEvents(void)
 	{
 		if (!strcmp("settime", LE_getCurrentToken()))
 		{
-			time = LE_readReal();
+			time = LE_readReal()*DELAY_SCENE_FACTOR;
 			//Log_Printf("settime=%d.\n",time);
 		}
 		else
 		if (!strcmp("addtime", LE_getCurrentToken())) 
 		{
-			time += LE_readReal();
+			time += LE_readReal()*DELAY_SCENE_FACTOR;
 		}
 		if (!strcmp("setttl", LE_getCurrentToken()))
 		{
-			ttl = LE_readReal();
+			ttl = LE_readReal()*DELAY_SCENE_FACTOR;
 			//Log_Printf("ttl=%.2f.\n",ttl);
 		}		
 		else if (!strcmp("at", LE_getCurrentToken()))
 		{
-			at = time + LE_readReal();
+			at = time + LE_readReal()*DELAY_SCENE_FACTOR;
 		
 			//Log_Printf("Fount enemy at %d.\n",at);
 		
@@ -620,10 +620,6 @@ void EV_ReadEnemiesEvents(void)
 				LE_readToken();
 				eventPayload->mouvementPatternType = LE_readReal();
 				
-				
-				 
-				 
-				 
 				switch (eventPayload->mouvementPatternType) {
 					case MVMT_X_SIN:
 						LE_readToken();

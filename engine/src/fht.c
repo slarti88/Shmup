@@ -39,7 +39,7 @@ void updateXSin(enemy_t* enemy)
 	float f;
 	float oneMinusF;
 	
-	f = enemy->timeCounter / enemy->fttl ;	
+	f = enemy->timeCounter / enemy->fttl ;		
 	oneMinusF = 1 -f;
 	
 	enemy->entity.yAxisRot = f * FHT_NUM_ROTATION*1.5 * 2.0f * M_PI;

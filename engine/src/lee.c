@@ -38,11 +38,14 @@
 
 
 #define LEE_BULLET_SIZE 0.07f
-//#define LEE_BULLET_TTL 2700
-#define LEE_BULLET_TTL 5000
+#define LEE_BULLET_TTL 2700
+//#define LEE_BULLET_TTL 5000
 #define LEE_BULLET_DISTANCE_TTL (-2)
 
-#define LEE_TEXT_BULLET_U (90/128.0f*SHRT_MAX)
+// DIstance till which the bullet is shot
+#define LEE_BULLET_DISTANCE_FACTOR .4
+
+#define LEE_TEXT_BULLET_U (80/128.0f*SHRT_MAX)
 #define LEE_TEXT_BULLET_V (0/128.0f*SHRT_MAX)
 #define LEE_TEXT_BULLET_WIDTH (16/128.0f*SHRT_MAX)
 #define LEE_TEXT_BULLET_HEIGHT (16/128.0f*SHRT_MAX)
@@ -153,8 +156,8 @@ void emitBullet(enemy_t* enemy)
 	if (enemy->parameters[PARAMETER_LEE_FIRING_TYPE] == LEE_FIRING_TYPE_DOWN)
 	{
 		
-		bullet->posDiff[X] = LEE_BULLET_DISTANCE_TTL *SS_H*enemy->parameters[PARAMETER_LEE_BULLET_SPEED_FACTOR]*cosf(enemy->entity.yAxisRot+M_PI/2);
-		bullet->posDiff[Y] = LEE_BULLET_DISTANCE_TTL *SS_H*enemy->parameters[PARAMETER_LEE_BULLET_SPEED_FACTOR]*sinf(enemy->entity.yAxisRot+M_PI/2);
+		bullet->posDiff[X] = LEE_BULLET_DISTANCE_TTL *LEE_BULLET_DISTANCE_FACTOR*SS_H*enemy->parameters[PARAMETER_LEE_BULLET_SPEED_FACTOR]*cosf(enemy->entity.yAxisRot+M_PI/2);
+		bullet->posDiff[Y] = LEE_BULLET_DISTANCE_TTL *LEE_BULLET_DISTANCE_FACTOR*SS_H*enemy->parameters[PARAMETER_LEE_BULLET_SPEED_FACTOR]*sinf(enemy->entity.yAxisRot+M_PI/2);
 	}
 	else 
 	if (enemy->parameters[PARAMETER_LEE_FIRING_TYPE] == LEE_FIRING_TYPE_NO_FIRE)

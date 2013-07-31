@@ -47,7 +47,7 @@
 #define EV_LIMITED_EVENT	0xE
 #define EV_CLEAR_TITLE      0xF
 
-#define DELAY_SCENE_FACTOR 2
+#define DELAY_SCENE_FACTOR 1
 
 typedef struct event_t
 {

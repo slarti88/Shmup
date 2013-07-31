@@ -178,6 +178,8 @@ void P_ResetPlayer(int i)
 	
 	player->showPointer = 0;
 	player->autopilot.enabled = 0;
+	player->energy = PLAYER_DEFAULT_ENERGY;
+	Log_Printf("Player no %d energy %d",i,(int)player->energy);
 	
 	for (j=0; j < MAX_PLAYER_BULLETS; j++) 
 	{
@@ -503,7 +505,9 @@ void P_Update(void)
 				players[i].invulFlickering += timediff;
 				players[i].shouldDraw =players[i].invulFlickering & 128 ; //Fickering every 128ms
 				
+				// Invlnerability removal
 				players[i].invulnerableFor -= timediff;
+
 				if (players[i].invulnerableFor <= 0)
 						players[i].shouldDraw = 1;
 			}
@@ -1322,7 +1326,10 @@ void P_Die(uchar playerId)
 		players[playerId].autopilot.originalTime = PLAYER_RESPAWN_REPLACMENT;
 		
 		players[playerId].showPointer = SHOW_POINTER_DURATION;
-		
+
+		// Also reset energy value
+		players[playerId].energy = PLAYER_DEFAULT_ENERGY;	
+				
 	}
 	else 
 	{
@@ -1342,8 +1349,7 @@ void P_Die(uchar playerId)
 		
 		players[playerId].autopilot.timeCounter = 2000000;
 		players[playerId].shouldDraw = 0;
-		
-		
+				
 		if (((numPlayers == 1) && (playerId == controlledPlayer))     ||
 			((numPlayers == 2) && (players[0].respawnCounter < 0 && players[1].respawnCounter < 0))
            )

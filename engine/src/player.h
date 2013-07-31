@@ -53,6 +53,9 @@ extern texture_t pointersTexture;
 #define PLAYER_INVUL_TIME_MS 3700
 #define PLAYER_RESPAWN_REPLACMENT 1700.0f
 #define PLAYER_ENDLEVEL_REPLACMENT 1000.0f
+#define PLAYER_DEFAULT_ENERGY 100
+#define PLAYER_DEFAULT_ENERGY_LOSS 2
+
 typedef struct player_bullet_config_t
 {
 	//From config file
@@ -201,8 +204,6 @@ typedef struct player_t
 	int firingUpTo;
 	uchar lastFiringFlashType;
 	
-	 
-	
 	short ss_boudaries[4];
 	
 	ghost_t ghosts[GHOSTS_NUM];
@@ -221,6 +222,9 @@ typedef struct player_t
 	//vec3_t spawnWorldPosition;
 	
 	uint score;
+
+	// Energy parameter
+	short energy;
 	
 } player_t ;
 

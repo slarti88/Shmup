@@ -408,6 +408,9 @@ void COLL_CheckPlayers(void)
 	// User in invulnerable
 	if (players[controlledPlayer].invulnerableFor > 0)
 		return;
+
+	// For permanent vulnerability from bullets return here
+	//return;
 		
 	for (j=0; j < partLib.numParticules; j++) 
 	{
@@ -419,9 +422,16 @@ void COLL_CheckPlayers(void)
 			continue;
 		
 		//We have a collision here
+
+		// If player has energy 
+		Log_Printf("player energy %d\n",(int)players[controlledPlayer].energy);
+		players[controlledPlayer].energy -= PLAYER_DEFAULT_ENERGY_LOSS;
 		
-		P_Die(controlledPlayer);
-		partLib.particules[j].ttl = 0;
+		if (players[controlledPlayer].energy <= 0) {
+			P_Die(controlledPlayer);
+			partLib.particules[j].ttl = 0;
+		}
+		
 	}
 	
 }
@@ -553,8 +563,6 @@ void COLL_CheckEnemies(void)
 			//enemy->ss_position[Y] += (rand() - (RAND_MAX >> 1)) / (float)(RAND_MAX >> 1) * 0.1 ;
 			//FX_GetExplosion(enemy);
 			
-			
-			
 			Spawn_EntityParticules(enemy->ss_position);
 			// spwan smoke
 			
@@ -577,10 +585,13 @@ void COLL_CheckEnemies(void)
 	
 	
 	// User in invulnerable
+	
 	if (players[controlledPlayer].invulnerableFor > 0)
 		return;
 	
-	
+	// For permanent vulnerability from enemies return here
+	//return;
+
 	enemy = ENE_GetFirstEnemy();
 	while (enemy != NULL) 
 	{
@@ -596,8 +607,12 @@ void COLL_CheckEnemies(void)
 		}
 		else 
 		{
-			P_Die(controlledPlayer);
-			break;
+			Log_Printf("Collision with enemies, energy %d",(int)players[controlledPlayer].energy);
+			players[controlledPlayer].energy -= PLAYER_DEFAULT_ENERGY_LOSS;
+			if (players[controlledPlayer].energy <= 0) {
+				P_Die(controlledPlayer);
+				break;
+			}						
 		}
 	}
 }		

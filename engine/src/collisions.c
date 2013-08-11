@@ -426,6 +426,7 @@ void COLL_CheckPlayers(void)
 		// If player has energy 
 		Log_Printf("player energy %d\n",(int)players[controlledPlayer].energy);
 		players[controlledPlayer].energy -= PLAYER_DEFAULT_ENERGY_LOSS;
+		players[controlledPlayer].shouldFlicker = 1;
 		
 		if (players[controlledPlayer].energy <= 0) {
 			P_Die(controlledPlayer);

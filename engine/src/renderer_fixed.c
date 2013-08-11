@@ -657,8 +657,19 @@ void RenderEntitiesF(void)
 	for (i=0 ; i < numPlayers; i++) 
 	{
 		//Log_Printf("player[%d].shouldDraw=%d\n",i,players[i].shouldDraw);
-		if (players[i].shouldDraw)
-			RenderEntityF(&players[i].entity);
+		if (players[i].shouldDraw) {
+			// Slarti - Flicker the player when he gets hurt
+			if (players[i].shouldFlicker)
+			{
+				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
+				RenderEntityF(&players[i].entity);
+				players[i].shouldFlicker = 0;
+				glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+			} else {
+				RenderEntityF(&players[i].entity);
+			}
+		}
 	}
 	
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);

@@ -129,7 +129,7 @@ typedef struct bullet_t
 #define GHOST_DELTA_T_MS 8
 #define GHOST_TAIL_VERTICES (400/GHOST_DELTA_T_MS*2)
 #define GHOST_TTL_MS 1500
-#define MS_BETWEEN_GHOST 5000
+#define MS_BETWEEN_GHOST 1000
 //#define GHOST_FREE_TIME_MS 140
 #define GHOST_FREE_TIME_MS ((int)(GHOST_TTL_MS/(float)100*13))
 //#define GHOST_FREE_TIME_MS ((int)(GHOST_TTL_MS - GHOST_TTL_MS/(float)100*25))
@@ -213,7 +213,7 @@ typedef struct player_t
 	ushort invulFlickering;
 	char respawnCounter;
 	uchar shouldDraw;
-	
+		
 	autopilot_t autopilot;
 	int showPointer;
 	
@@ -225,6 +225,8 @@ typedef struct player_t
 
 	// Energy parameter
 	short energy;
+	uchar shouldFlicker;
+
 	
 } player_t ;
 

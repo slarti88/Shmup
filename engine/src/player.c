@@ -179,8 +179,8 @@ void P_ResetPlayer(int i)
 	player->showPointer = 0;
 	player->autopilot.enabled = 0;
 	player->energy = PLAYER_DEFAULT_ENERGY;
-	Log_Printf("Player no %d energy %d",i,(int)player->energy);
-	
+	player->shouldFlicker = 0;
+		
 	for (j=0; j < MAX_PLAYER_BULLETS; j++) 
 	{
 		player->bullets[j].energy = BULLET_DEFAULT_ENERGY;
@@ -1329,6 +1329,7 @@ void P_Die(uchar playerId)
 
 		// Also reset energy value
 		players[playerId].energy = PLAYER_DEFAULT_ENERGY;	
+		players[playerId].shouldFlicker = 0;
 				
 	}
 	else 

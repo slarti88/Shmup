@@ -139,8 +139,10 @@ void IO_PushEvent(io_event_s* event_in){
 				if (event.type == IO_EVENT_BEGAN)
 				{
 					int currTime = E_Sys_Milliseconds();
-					if (currTime-lastTouchBegan < 200)
+					if (currTime-lastTouchBegan < 200) {
+						Log_Printf("Ghost button down down down down down!");
 						touches[BUTTON_GHOST].down = 1;
+					}
 					
 					lastTouchBegan = currTime ;
 					

@@ -32,6 +32,7 @@
 #include "texture.h"
 #include "fx.h"
 
+typedef enum {DIR_LEFT,DIR_MIDLEFT,DIR_CENTER,DIR_MIDRIGHT,DIR_RIGHT} BulletDirection_e;
 
 extern texture_t pointersTexture;
 
@@ -108,12 +109,13 @@ extern int numPBulletsIndices;
 extern unsigned short bulletIndices[(MAX_PLAYER_BULLETS * 6 + 6)*MAX_NUM_PLAYERS];
 extern xf_colorless_sprite_t pBulletVertices[(MAX_PLAYER_BULLETS*4+4)*MAX_NUM_PLAYERS];
 
-
+typedef void (*bulletUpdatePosition_t)(struct bullet_t*);
 typedef struct bullet_t
 {	
 	short ss_boudaries[4];
 	
 	short spawnedY;
+	short spawnedX;
 	
 	int expirationTime;
 	int spawnedTime;
@@ -121,6 +123,9 @@ typedef struct bullet_t
 	short energy;
 	
 	uchar type;
+
+	bulletUpdatePosition_t updatePosition;
+	short direction;
 	
 } bullet_t ;
 
@@ -195,19 +200,7 @@ typedef struct player_t
 	
 	char modelPath[256];
 	
-	int nextBulletFireTime;
-	uchar nextBulletSlotIndice;
-	bullet_t bullets[MAX_PLAYER_BULLETS];
-	
-	uchar lastBulletType;
-	
-	int firingUpTo;
-	uchar lastFiringFlashType;
-	
 	short ss_boudaries[4];
-	
-	ghost_t ghosts[GHOSTS_NUM];
-	int nextGhostFireTime;
 	
 	int invulnerableFor;
 	ushort invulFlickering;
@@ -227,7 +220,19 @@ typedef struct player_t
 	short energy;
 	uchar shouldFlicker;
 
+	// Bullets
+	int nextBulletFireTime;
+	uchar nextBulletSlotIndice;
+	bullet_t bullets[MAX_PLAYER_BULLETS];
 	
+	uchar lastBulletType;
+	
+	int firingUpTo;
+	uchar lastFiringFlashType;
+
+	ghost_t ghosts[GHOSTS_NUM];
+	int nextGhostFireTime;	
+
 } player_t ;
 
 
@@ -255,7 +260,7 @@ void P_PrepareBulletSprites(void);
 void P_FireOneBullet(player_t* player);
 void P_FireTwoBullet(player_t* player);
 
-
+void P_UpdateBullets(player_t* player);
 
 void P_UpdateGhosts(player_t* player);
 void P_PrepareGhostSprites(void);

@@ -109,7 +109,14 @@ extern int numPBulletsIndices;
 extern unsigned short bulletIndices[(MAX_PLAYER_BULLETS * 6 + 6)*MAX_NUM_PLAYERS];
 extern xf_colorless_sprite_t pBulletVertices[(MAX_PLAYER_BULLETS*4+4)*MAX_NUM_PLAYERS];
 
+// Externed so that the renderer files assume its declared somewhere when linking everything is linked properly
+
+extern unsigned short pContraBulletIndices[(MAX_PLAYER_BULLETS * 6 + 6)*MAX_NUM_PLAYERS];
+extern xf_colorless_sprite_t pContraBulletVertices[(MAX_PLAYER_BULLETS*4+4)*MAX_NUM_PLAYERS];
+extern int numPContraBulletsIndices;
+
 typedef void (*bulletUpdatePosition_t)(struct bullet_t*);
+
 typedef struct bullet_t
 {	
 	short ss_boudaries[4];
@@ -125,7 +132,6 @@ typedef struct bullet_t
 	uchar type;
 
 	bulletUpdatePosition_t updatePosition;
-	short direction;
 	
 } bullet_t ;
 
@@ -145,6 +151,10 @@ typedef struct bullet_t
 #define GHOSTS_NUM 8
 #define GHOST_ROT_SPEED_RAD_MS (2*M_PI/400)
 #define GHOST_ROT_RAD_PER_DELTA (GHOST_ROT_SPEED_RAD_MS*GHOST_DELTA_T_MS)
+
+
+#define CONTRA_MS_BETWEEN_BULLETS 200
+
 
 typedef struct ghost_t
 {
@@ -169,6 +179,24 @@ typedef struct ghost_t
 	unsigned int targetUniqueId ;
 	
 } ghost_t;
+
+typedef struct contra_bullet_t {
+    
+    short ss_boudaries[4];
+    
+	short spawnedY;
+	short spawnedX;
+	
+	int expirationTime;
+	int spawnedTime;
+	
+	short energy;
+	
+	bulletUpdatePosition_t updatePosition;
+	short direction;
+    
+} contra_bullet_t;
+
 
 extern texture_t ghostTexture;
 
@@ -231,14 +259,14 @@ typedef struct player_t
 	uchar lastFiringFlashType;
 
 	ghost_t ghosts[GHOSTS_NUM];
-	int nextGhostFireTime;	
+	int nextGhostFireTime;
+    
+    int nextContraBulletFireTime;
+	uchar nextContraBulletSlotIndice;
+    contra_bullet_t contraBullets[MAX_PLAYER_BULLETS];
+    
 
 } player_t ;
-
-
-
-
-
 
 extern uchar numPlayers;
 extern uchar controlledPlayer;
@@ -273,6 +301,12 @@ void P_CreatePointerCoordinates(void);
 void P_PreparePointerSprites(void);
 
 void PL_RenderPlayerPointers(void);
+
+void P_UpdateContraBullets(player_t* player);
+
+void BulletUpdatePositionLinear(bullet_t* bullet);
+void BulletUpdatePositionRadial(contra_bullet_t* bullet);
+
 
 
 // Structure array populated to draw player cursor

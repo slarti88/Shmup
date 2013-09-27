@@ -756,21 +756,28 @@ void RenderPlayersBulletsF(void)
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	
 	SetTextureF(bulletConfig.bulletTexture.textureId);
-	
+/*
 	//Player bullets
 	glVertexPointer(  2, GL_SHORT,  sizeof(xf_colorless_sprite_t), pBulletVertices->pos);
-	glTexCoordPointer(2, GL_SHORT,  sizeof(xf_colorless_sprite_t), pBulletVertices->text);			
-	glDrawElements (GL_TRIANGLES, numPBulletsIndices, GL_UNSIGNED_SHORT,bulletIndices);
-	STATS_AddTriangles(numPBulletsIndices/3);
-	
+	glTexCoordPointer(2, GL_SHORT,  sizeof(xf_colorless_sprite_t), pBulletVertices->text);
+    glDrawElements (GL_TRIANGLES, numPBulletsIndices, GL_UNSIGNED_SHORT,bulletIndices);
+    STATS_AddTriangles(numPBulletsIndices/3);
+*/	
 	//Also render enemy bullets
-//	glColor4f(1, 1, 1, 1);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	
 	glVertexPointer(  2, GL_SHORT,  sizeof(xf_colorless_sprite_t), partLib.ss_vertices[0].pos);
 	glTexCoordPointer(2, GL_SHORT,  sizeof(xf_colorless_sprite_t), partLib.ss_vertices[0].text);			
 	glDrawElements (GL_TRIANGLES, partLib.num_indices, GL_UNSIGNED_SHORT,partLib.indices);
 	STATS_AddTriangles(partLib.num_indices/3);
+
+    // Render contra style bullets if necessart
+    glVertexPointer(  2, GL_SHORT,  sizeof(xf_colorless_sprite_t), pContraBulletVertices->pos);
+	glTexCoordPointer(2, GL_SHORT,  sizeof(xf_colorless_sprite_t), pContraBulletVertices->text);
+	glDrawElements (GL_TRIANGLES, numPContraBulletsIndices, GL_UNSIGNED_SHORT,pContraBulletIndices);
+	STATS_AddTriangles(numPContraBulletsIndices/3);
+ 
+
 }
+
 
 void RenderFXSpritesF(void)
 {
@@ -811,25 +818,14 @@ void RenderFXSpritesF(void)
 	SetTextureF(ghostTexture.textureId);
 	for(i=0 ; i <numPlayers ; i++)
 	{
-		/*
-		if (i==0)
-			glColor4f(0.8f, 0.8f, 1.0f, 0.9f);
-		else {
-			glColor4f(1.0f, 0.4f, 0.4f, 0.9f);
-		}
-*/
-		
 		
 		for (j=0; j< GHOSTS_NUM; j++) 
 		{
 			if (players[i].ghosts[j].timeCounter >= GHOST_TTL_MS)
 				continue;
 			
-			
-			//vertices = &players[i].ghosts[j].wayPoints[players[i].ghosts[j].startVertexArray];
 			glVertexPointer(  2, GL_SHORT,  sizeof(xf_colorless_sprite_t), players[i].ghosts[j].wayPoints[players[i].ghosts[j].startVertexArray].pos);
 			glTexCoordPointer(2, GL_SHORT,  sizeof(xf_colorless_sprite_t), players[i].ghosts[j].wayPoints[players[i].ghosts[j].startVertexArray].text);
-			//glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(xf_sprite_t), vertices->color);
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, players[i].ghosts[j].lengthVertexArray);
 			STATS_AddTriangles((players[i].ghosts[j].lengthVertexArray/2));
 		}

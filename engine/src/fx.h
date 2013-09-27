@@ -87,6 +87,13 @@ typedef struct xf_colorless_sprite_t
 	vec2short_t text;	
 } xf_colorless_sprite_t;
 
+typedef struct xf_colorless_sprite_entity_t {
+    
+    xf_colorless_sprite_t* sprite;
+    int numIndices;
+    unsigned short* indiceArray;
+    
+} xf_colorless_sprite_entity_t;
 
 
 

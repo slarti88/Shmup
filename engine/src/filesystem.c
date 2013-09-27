@@ -35,13 +35,15 @@ char fs_writableDir[ MAX_OSPATH ];
 void FS_InitFilesystem( void )
 {
 	char *p;
-	p = getenv("RD");
+    // Hack to get it to run on mac os x
+    p = "../";
+	//p = getenv("RD");
 	sprintf( fs_gamedir, "%s", p );
-	//Log_Printf("[Filesystem] Base    directory initialized (%s).\n",fs_gamedir);
+	Log_Printf("[Filesystem] Base    directory initialized (%s).\n",fs_gamedir);
 	
 	p = getenv("WD");\
 	sprintf( fs_writableDir, "%s", p );
-	//Log_Printf("[Filesystem] Writable directory initialized (%s).\n",fs_writableDir);
+	Log_Printf("[Filesystem] Writable directory initialized (%s).\n",fs_writableDir);
 
 
 	

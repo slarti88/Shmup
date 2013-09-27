@@ -37,6 +37,8 @@
 
 
 typedef enum { UP, DOWN, LEFT, RIGHT} ScreenSpaceBoundaries_e;
+typedef enum { TOP_LEFT_X, TOP_LEFT_Y, BOTTOM_LEFT_X,BOTTOM_LEFT_Y,
+               TOP_RIGHT_X,TOP_RIGHT_Y,BOTTOM_RIGHT_X,BOTTOM_RIGHT_Y} ScreenSpaceBoundariesNew_e;
 
 typedef struct entity_t {
 

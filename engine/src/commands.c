@@ -47,7 +47,6 @@ touch_t touches[NUM_BUTTONS];
 //    0 2            4  6            8  10
 //    1 3            5  7            9  11
 ushort controlIndices[16] = {0,1,2,3,3,4,4,5,6,7,7,8,8,9,10,11};
-//ushort controlIndices[NUM_CIRCLES*NUM_VERTICES_PER_CIRCLES*6] ;
 ushort controlNumIndices;
 xf_textureless_sprite_t controlVertices[NUM_CONTROL_VERTICES];
 
@@ -240,7 +239,6 @@ void COM_ConvertLocalTouchsToCommands(void)
 	
 	}
 	
-	
 	if (touches[BUTTON_FIRE].down)
 	{
 		command->buttons |= BUTTON_FIRE_PRESSED;
@@ -251,6 +249,10 @@ void COM_ConvertLocalTouchsToCommands(void)
 		command->buttons |= BUTTON_GHOST_PRESSED; 
 	}
 	
+    if (touches[BUTTON_ALT_FIRE].down) {
+        command->buttons |= BUTTON_ALT_FIRE_PRESSED;
+    }
+    
 	//if(command->time != simulationTime)
 	//	commandsBuffers[controlledPlayer].numCommands = 0;
 	//Need to copy cmd to send to netchannel.c
@@ -261,6 +263,8 @@ void COM_ConvertLocalTouchsToCommands(void)
 	touches[BUTTON_MOVE].dist[Y] = 0;
 
 	touches[BUTTON_GHOST].down = 0;
+    
+    touches[BUTTON_ALT_FIRE].down = 0;
 }
 
 
@@ -493,6 +497,12 @@ void COM_ExecCommand(command_t* command)
 				P_FireGhosts(player);
 			}
 			
+            // Check for alternate kind of firing
+            if ((command->buttons & BUTTON_ALT_FIRE_PRESSED) == BUTTON_ALT_FIRE_PRESSED) {
+                P_FireContraBullet(player);
+                
+            }
+            
 			if (player->autopilot.enabled)
 				return;
 			

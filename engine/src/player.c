@@ -66,7 +66,6 @@ xf_colorless_sprite_t pContraBulletVertices[(MAX_PLAYER_BULLETS*4+4)*MAX_NUM_PLA
 
 
 int numPBulletsIndices=0;
-int numPContraBulletsIndices = 0;
 
 xf_colorless_sprite_entity_t bulletEntities;
 
@@ -308,7 +307,7 @@ void P_InitPlayers(void)
 	bulletConfig.flashScreenSpaceXDelta = 2*SS_W * bulletConfig.flashScreenSpaceXDeltaRatio;
 	bulletConfig.flashScreenSpaceYDelta = 2*SS_H* bulletConfig.flashScreenSpaceYDeltaRatio;
 	
-	bulletConfig.msBetweenBullets = (2*SS_H*bulletConfig.heightRatio*4) * (bulletConfig.ttl/(2.0f*SS_H));
+	bulletConfig.msBetweenBullets = (2*SS_H*bulletConfig.heightRatio) * (bulletConfig.ttl/(2.0f*SS_H));
 
 	bulletConfig.flashHeight =		(SS_H			      * bulletConfig.flashHeightRatio);
 	bulletConfig.flashHalfWidth  = (bulletConfig.flashHeight  * bulletConfig.flashWidthRatio);
@@ -351,10 +350,11 @@ void BulletUpdatePositionLinear(bullet_t* bullet){
 	t = (simulationTime - bullet->spawnedTime)/ (float)bulletConfig.ttl ;				
 	bulletHeight = bullet->spawnedY +  t* (bulletConfig.distPerLifepsan);
 	bullet->ss_boudaries[UP] = bulletHeight + bulletConfig.halfHeight;
-	bullet->ss_boudaries[DOWN] = bulletHeight - bulletConfig.halfHeight ;
+	bullet->ss_boudaries[DOWN] = bulletHeight - bulletConfig.halfHeight;
+    
 }
 
-void BulletUpdatePositionRadial(contra_bullet_t* bullet){
+void BulletUpdatePositionRadial(bullet_t* bullet){
 	float t = 0;
 	short bulletHeight = 0;	
 	short bulletWidth = 0;
@@ -371,79 +371,129 @@ void BulletUpdatePositionRadial(contra_bullet_t* bullet){
 	bullet->ss_boudaries[LEFT] = bulletWidth - bulletConfig.halfWidth;
 	bullet->ss_boudaries[RIGHT] = bulletWidth + bulletConfig.halfWidth;
     
-    Log_Printf("bullet direction %d",bullet->direction);
-    /*
-    bullet->ss_boundaries_new[TOP_LEFT_Y] = bulletHeight +
-                                            bulletConfig.halfHeight*sin(bullet->direction*theta);
-    bullet->ss_boundaries_new[TOP_LEFT_X] = bulletWidth - bulletConfig.halfWidth -
-                                            bulletConfig.halfHeight*cos(bullet->direction*theta);
-    bullet->ss_boundaries_new[TOP_RIGHT_Y] = bullet->ss_boundaries_new[TOP_LEFT_Y];
-    bullet->ss_boundaries_new[TOP_RIGHT_X] = bulletWidth + bulletConfig.halfWidth -
-                                            bulletConfig.halfHeight*cos(bullet->direction*theta);
-    
-    bullet->ss_boundaries_new[BOTTOM_LEFT_Y] = bulletHeight -
-                                               bulletConfig.halfHeight*sin(bullet->direction*theta);
-    bullet->ss_boundaries_new[BOTTOM_LEFT_X] = bulletWidth - bulletConfig.halfWidth +
-                                               bulletConfig.halfHeight*cos(bullet->direction*theta);
-    bullet->ss_boundaries_new[BOTTOM_RIGHT_Y] = bullet->ss_boundaries_new[BOTTOM_LEFT_Y];
-    bullet->ss_boundaries_new[BOTTOM_RIGHT_X] = bulletWidth + bulletConfig.halfWidth +
-                                             bulletConfig.halfHeight*cos(bullet->direction*theta);
- */
 }
-     
-     
+
+void BulletUpdateSpriteLinear(bullet_t* bullet, xf_colorless_sprite_t* bulSprite,int i) {
+ 
+    bullet->type++;
+    bullet->type = bullet->type & 3;
+    
+    bulSprite[0].pos[X] = bullet->ss_boudaries[LEFT];
+    bulSprite[0].pos[Y] = bullet->ss_boudaries[DOWN];
+    
+    bulSprite[0].text[X] = i*(16.0f/128*SHRT_MAX) ;
+    bulSprite[0].text[Y] = bullet->type*(32.0f/128*SHRT_MAX) + 32.0f/128*SHRT_MAX;
+    //bulSprite++;
+    
+    bulSprite[1].pos[X] = bullet->ss_boudaries[LEFT];
+    bulSprite[1].pos[Y] = bullet->ss_boudaries[UP];
+    
+    bulSprite[1].text[X] = i*(16.0f/128*SHRT_MAX);
+    bulSprite[1].text[Y] = bullet->type*(32.0f/128*SHRT_MAX) ;
+    //bulSprite++;
+    
+    bulSprite[2].pos[X] = bullet->ss_boudaries[RIGHT];
+    bulSprite[2].pos[Y] = bullet->ss_boudaries[UP];
+    
+    bulSprite[2].text[X] = i*(16.0f/128*SHRT_MAX) + 16.0f/128*SHRT_MAX;
+    bulSprite[2].text[Y] = bullet->type*(32.0f/128*SHRT_MAX);
+    //bulSprite++;
+    
+    bulSprite[3].pos[X] = bullet->ss_boudaries[RIGHT];
+    bulSprite[3].pos[Y] = bullet->ss_boudaries[DOWN];
+    
+    bulSprite[3].text[X] = i*(16.0f/128*SHRT_MAX) + (16.0f/128*SHRT_MAX);
+    bulSprite[3].text[Y] = bullet->type*(32.0f/128*SHRT_MAX)+32.0f/128*SHRT_MAX;
+    //bulSprite++;
+    
+}
+
+void BulletUpdateSpriteRadial(bullet_t* bullet, xf_colorless_sprite_t* bulSprite,int i) {
+    
+    
+    bulSprite[0].pos[X] = bullet->ss_boudaries[LEFT];
+    bulSprite[0].pos[Y] = bullet->ss_boudaries[DOWN];
+    
+    bulSprite[0].text[X] = 80.0f/128*SHRT_MAX;
+    bulSprite[0].text[Y] = 32.0f/128*SHRT_MAX;
+    
+    bulSprite[1].pos[X] = bullet->ss_boudaries[LEFT];
+    bulSprite[1].pos[Y] = bullet->ss_boudaries[UP];
+    
+    bulSprite[1].text[X] = 80.0f/128*SHRT_MAX;
+    bulSprite[1].text[Y] = 0;
+    
+    bulSprite[2].pos[X] = bullet->ss_boudaries[RIGHT];
+    bulSprite[2].pos[Y] = bullet->ss_boudaries[UP];
+    
+    bulSprite[2].text[X] = 80.0f/128*SHRT_MAX + 16.0f/128*SHRT_MAX;
+    bulSprite[2].text[Y] = 0;
+    
+    bulSprite[3].pos[X] = bullet->ss_boudaries[RIGHT];
+    bulSprite[3].pos[Y] = bullet->ss_boudaries[DOWN];
+    
+    bulSprite[3].text[X] = 80.0f/128*SHRT_MAX + (16.0f/128*SHRT_MAX);
+    bulSprite[3].text[Y] = 32.0f/128*SHRT_MAX;
+    
+}
+
 void P_FireBullet(player_t* player,float deltaX, float deltaY)
 {
 	
 	vec2_t spawningPos ;
 	
 	bullet_t* bullet;
+    
+    bullet = &player->bullets[player->nextBulletSlotIndice];
+    player->nextBulletSlotIndice++;
+    player->nextBulletSlotIndice = (MAX_PLAYER_BULLETS-1) & player->nextBulletSlotIndice;
+
+    Log_Printf("Bullet index %d \n",player->nextBulletSlotIndice);
+    
+    spawningPos[X] = player->ss_position[X]*SS_W + deltaX;
+    spawningPos[Y] = player->ss_position[Y]*SS_H + deltaY;
+
+    bullet->spawnedY = spawningPos[Y];
+    bullet->spawnedX = spawningPos[X];
+
+    bullet->spawnedTime = simulationTime;
+
+    //Generate ss_boudaries
+    bullet->ss_boudaries[UP]   =  spawningPos[Y] + bulletConfig.halfHeight;
+    bullet->ss_boudaries[DOWN] =  spawningPos[Y] - bulletConfig.halfHeight;
+    bullet->ss_boudaries[LEFT] =  spawningPos[X] - bulletConfig.halfWidth;
+    bullet->ss_boudaries[RIGHT]=  spawningPos[X] + bulletConfig.halfWidth;
+
+    bullet->energy = BULLET_DEFAULT_ENERGY;
+
+    // Update function for the bullet
+    bullet->updatePosition = BulletUpdatePositionLinear;
+    bullet->updateSprite = BulletUpdateSpriteLinear;
+    
+    // By anding with three you ensure that the value loops between 0 1 and 2.
+    bullet->type = player->lastBulletType++ ;
+    player->lastBulletType &= 3;
+
+    player->firingUpTo = simulationTime+ bulletConfig.msBetweenBullets;
+
+    bullet->expirationTime = simulationTime + bulletConfig.ttl ;
+  // Log_Printf("newbslot=%u\n",player->nextBulletSlotIndice);
+}
+
+
+void P_FireContraBullet(player_t* player){
+    vec2_t spawningPos ;
+	
+	bullet_t* bullet;
+    
+    float deltaX = bulletConfig.ss_deltaX;
+    float deltaY = bulletConfig.ss_deltaY;
+    
 	int i;
 	for (i = 0; i < 5;i++) {
 		bullet = &player->bullets[player->nextBulletSlotIndice];
 		player->nextBulletSlotIndice++;
 		player->nextBulletSlotIndice = (MAX_PLAYER_BULLETS-1) & player->nextBulletSlotIndice;
-	
-		spawningPos[X] = player->ss_position[X]*SS_W + deltaX;
-		spawningPos[Y] = player->ss_position[Y]*SS_H + deltaY;
-	
-		bullet->spawnedY = spawningPos[Y];
-		bullet->spawnedX = spawningPos[X];
-	
-		bullet->spawnedTime = simulationTime;
-	
-		//Generate ss_boudaries
-		bullet->ss_boudaries[UP]   =  spawningPos[Y] + bulletConfig.halfHeight;
-		bullet->ss_boudaries[DOWN] =  spawningPos[Y] - bulletConfig.halfHeight;
-		bullet->ss_boudaries[LEFT] =  spawningPos[X] - bulletConfig.halfWidth;
-		bullet->ss_boudaries[RIGHT]=  spawningPos[X] + bulletConfig.halfWidth;
-	
-		bullet->energy = BULLET_DEFAULT_ENERGY;
-
-		// Update function for the bullet
-		bullet->updatePosition = BulletUpdatePositionLinear;
-		
-		// By anding with three you ensure that the value loops between 0 1 and 2.
-		bullet->type = player->lastBulletType++ ;
-		player->lastBulletType &= 3;
-	
-		player->firingUpTo = simulationTime+ bulletConfig.msBetweenBullets;
-    
-		bullet->expirationTime = simulationTime + bulletConfig.ttl ;	 
-	}
-  // Log_Printf("newbslot=%u\n",player->nextBulletSlotIndice);
-}
-
-
-void P_FireContraBullet(player_t* player,float deltaX, float deltaY){
-    vec2_t spawningPos ;
-	
-	contra_bullet_t* bullet;
-	int i;
-	for (i = 0; i < 5;i++) {
-		bullet = &player->contraBullets[player->nextContraBulletSlotIndice];
-		player->nextContraBulletSlotIndice++;
-		player->nextContraBulletSlotIndice = (MAX_PLAYER_BULLETS-1) & player->nextContraBulletSlotIndice;
         
 		spawningPos[X] = player->ss_position[X]*SS_W + deltaX;
 		spawningPos[Y] = player->ss_position[Y]*SS_H + deltaY;
@@ -466,7 +516,12 @@ void P_FireContraBullet(player_t* player,float deltaX, float deltaY){
 		player->firingUpTo = simulationTime + bulletConfig.msBetweenBullets;
         
 		bullet->expirationTime = simulationTime + bulletConfig.ttl ;
+        
+        bullet->updatePosition = BulletUpdatePositionRadial;
+        bullet->updateSprite = BulletUpdateSpriteRadial;
 	}
+    
+    player->nextBulletFireTime = simulationTime + CONTRA_MS_BETWEEN_BULLETS;
     
 }
 
@@ -495,16 +550,12 @@ void P_FireTwoBullet(player_t* player)
 	
 	SND_PlaySound(SND_PLASMA);
 	
-	//P_FireBullet(player,bulletConfig.ss_deltaX ,bulletConfig.ss_deltaY);
-	//P_FireBullet(player,-bulletConfig.ss_deltaX,bulletConfig.ss_deltaY);
+	P_FireBullet(player,bulletConfig.ss_deltaX ,bulletConfig.ss_deltaY);
+	P_FireBullet(player,-bulletConfig.ss_deltaX,bulletConfig.ss_deltaY);
 	
-    P_FireContraBullet(player, bulletConfig.ss_deltaX, bulletConfig.ss_deltaY);
-    player->nextBulletFireTime = simulationTime + CONTRA_MS_BETWEEN_BULLETS;
-    
-    
-	//player->nextBulletFireTime = simulationTime + bulletConfig.msBetweenBullets ;
-	//player->lastBulletType = ++player->lastBulletType ;
-	//player->lastBulletType = player->lastBulletType % 2;
+	player->nextBulletFireTime = simulationTime + bulletConfig.msBetweenBullets ;
+	player->lastBulletType = ++player->lastBulletType ;
+	player->lastBulletType = player->lastBulletType % 2;
 	
 }
 
@@ -619,12 +670,10 @@ void P_Update(void)
 			//END UPDATE MATRIX	
 			
 			//Also update bullets
-			//P_UpdateBullets(player);
+			P_UpdateBullets(player);
 			
 			// Update ghosts
 			P_UpdateGhosts(player);
-			
-            P_UpdateContraBullets(player);
 		}
 		else
 		{
@@ -908,7 +957,6 @@ void P_PrepareBulletSprites(void)
 	
 	bullet_t* bullet;
 	player_t* player;
-    contra_bullet_t* contra_bullet;
 	
 	bulSprite = pBulletVertices;
 	numPBulletsIndices = 0;
@@ -981,106 +1029,23 @@ void P_PrepareBulletSprites(void)
 			
 			
 		}
-		
-      //  char bulletdiagnostic[MAX_PLAYER_BULLETS+1+3];
-      //  bulletdiagnostic[0] = 'p';
-      //  bulletdiagnostic[1] = '0'+i;
-      //  bulletdiagnostic[2] = '-';
-      //  bulletdiagnostic[19]= '\0';
         
 		// Check if there is any bullets to render.
 		for(j=0 ; j < MAX_PLAYER_BULLETS ; j++)
 		{
 			bullet = &player->bullets[j];
 			
-		//	bulletdiagnostic[j+3] = '0';
 			if (bullet->expirationTime < simulationTime)
 				continue;
-		//	bulletdiagnostic[j+3] = '1';
+		    
+            bullet->updateSprite(bullet,bulSprite,i);
             
-            
-		    bullet->type++;
-			bullet->type = bullet->type & 3;
-			
-			bulSprite->pos[X] = bullet->ss_boudaries[LEFT];
-			bulSprite->pos[Y] = bullet->ss_boudaries[DOWN];
-            
-			bulSprite->text[X] = i*(16.0f/128*SHRT_MAX) ;
-			bulSprite->text[Y] = bullet->type*(32.0f/128*SHRT_MAX) + 32.0f/128*SHRT_MAX;
-			bulSprite++;
-			
-			bulSprite->pos[X] = bullet->ss_boudaries[LEFT];
-			bulSprite->pos[Y] = bullet->ss_boudaries[UP];
-			
-            bulSprite->text[X] = i*(16.0f/128*SHRT_MAX);
-			bulSprite->text[Y] = bullet->type*(32.0f/128*SHRT_MAX) ;
-			bulSprite++;
-				
-			bulSprite->pos[X] = bullet->ss_boudaries[RIGHT];
-			bulSprite->pos[Y] = bullet->ss_boudaries[UP];
-            
-			bulSprite->text[X] = i*(16.0f/128*SHRT_MAX) + 16.0f/128*SHRT_MAX;
-			bulSprite->text[Y] = bullet->type*(32.0f/128*SHRT_MAX);
-			bulSprite++;
-			
-			bulSprite->pos[X] = bullet->ss_boudaries[RIGHT];
-			bulSprite->pos[Y] = bullet->ss_boudaries[DOWN];
-            
-			bulSprite->text[X] = i*(16.0f/128*SHRT_MAX) + (16.0f/128*SHRT_MAX);
-			bulSprite->text[Y] = bullet->type*(32.0f/128*SHRT_MAX)+32.0f/128*SHRT_MAX;
-			bulSprite++;
-			
 			numPBulletsIndices += 6;
+            bulSprite += 4;
 		}
-        
-        bulSprite = pContraBulletVertices;
-        numPContraBulletsIndices = 0;
-        
-        // Check if he's firing contra style bullets
-        for (int j = 0; j < MAX_PLAYER_BULLETS; j++) {
-            
-            contra_bullet = &player->contraBullets[j];
-			
-            if (contra_bullet->expirationTime < simulationTime)
-				continue;
-            
-			bulSprite->pos[X] = contra_bullet->ss_boudaries[LEFT];
-			bulSprite->pos[Y] = contra_bullet->ss_boudaries[DOWN];
-            
-			bulSprite->text[X] = 80.0f/128*SHRT_MAX;
-			bulSprite->text[Y] = 32.0f/128*SHRT_MAX;
-			bulSprite++;
-			
-			bulSprite->pos[X] = contra_bullet->ss_boudaries[LEFT];
-			bulSprite->pos[Y] = contra_bullet->ss_boudaries[UP];
-			
-            bulSprite->text[X] = 80.0f/128*SHRT_MAX;
-			bulSprite->text[Y] = 0;
-			bulSprite++;
-            
-			bulSprite->pos[X] = contra_bullet->ss_boudaries[RIGHT];
-			bulSprite->pos[Y] = contra_bullet->ss_boudaries[UP];
-            
-			bulSprite->text[X] = 80.0f/128*SHRT_MAX + 16.0f/128*SHRT_MAX;
-			bulSprite->text[Y] = 0;
-			bulSprite++;
-			
-			bulSprite->pos[X] = contra_bullet->ss_boudaries[RIGHT];
-			bulSprite->pos[Y] = contra_bullet->ss_boudaries[DOWN];
-            
-			bulSprite->text[X] = 80.0f/128*SHRT_MAX + (16.0f/128*SHRT_MAX);
-			bulSprite->text[Y] = 32.0f/128*SHRT_MAX;
-            bulSprite++;
-            
-			numPContraBulletsIndices += 6;   
-        }
-
-        //printf("bulletDiag='%s'",bulletdiagnostic);
-       //Log_Printf("0=%d 1=%d\n",player->bullets[0].expirationTime,player->bullets[1].expirationTime);
-	}
+    }
+    
 }
-
-
 
 float ghostDirection[GHOSTS_NUM][2] = 
 {
@@ -1151,18 +1116,6 @@ void P_FireGhosts(player_t* player)
 	
 }
 
-void P_UpdateContraBullets(player_t* player) {
-    int j = 0;
-	contra_bullet_t* bullet;
-	
-	for(j=0; j < MAX_PLAYER_BULLETS ; j++) {
-		if (player->contraBullets[j].expirationTime < simulationTime )
-			continue;
-		bullet = &player->contraBullets[j];
-        BulletUpdatePositionRadial(bullet);
-	}
-}
-
 
 void P_UpdateBullets(player_t* player) {
 	int j = 0;
@@ -1219,9 +1172,7 @@ void P_UpdateGhosts(player_t* player)
 					
 					target = target->next;
 				}
-					   
-					
-				//printf("ghost target type=%d , ss_pos[%.2f,%.2f].\n",ghost->target->type,target->ss_position[X],target->ss_position[Y]);
+                
 				if (target->next != NULL)
 					target = target->next;
 			}

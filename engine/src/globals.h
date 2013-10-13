@@ -96,7 +96,7 @@ enum {WIDTH, HEIGHT}  ;
 #define SS_W SS_COO_SYST_WIDTH
 #define SS_H SS_COO_SYST_HEIGHT
 
-#define NUM_BUTTONS  3
+#define NUM_BUTTONS  4
 
 #ifdef WIN32
   #pragma warning(disable: 4244)

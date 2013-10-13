@@ -155,6 +155,19 @@ int initialized = 0;
     IO_PushEvent(&event);
 }
 
+- (void) rightMouseDown:(NSEvent *)theEvent {
+    io_event_s event;
+    NSPoint position = theEvent.locationInWindow;
+    
+    event.type = IO_EVENT_ALT_BEGAN;
+    event.position[X] = position.x ;
+    event.position[Y] = self.frame.size.height - position.y ;
+    
+    IO_PushEvent(&event);
+
+}
+
+
 #include "menu.h"
 #pragma mark    -   NSResponder
 - (void)cancelOperation:(id)sender

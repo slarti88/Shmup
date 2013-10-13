@@ -109,13 +109,15 @@ void IO_PushEvent(io_event_s* event_in){
 			event.position[X] = ( event.position[X]- renderer.viewPortDimensions[VP_X] ) * commScale[X] ;//* renderer.resolution ;
 			event.position[Y] = ( event.position[Y]- renderer.viewPortDimensions[VP_Y] ) * commScale[Y] ;//* renderer.resolution;
 			
-			
-			
+            if (event.type == IO_EVENT_SCROLL) {
+                // Here a scroll action
+            }
 			
 			if (event.type == IO_EVENT_ENDED) 
-			{
+			{                
 				//if (touchCount == 1) //Last finger ended
 					touches[BUTTON_FIRE].down = 0;
+                    touches[BUTTON_ALT_FIRE].down = 0;
 			}
 			else 
 			{
@@ -140,6 +142,7 @@ void IO_PushEvent(io_event_s* event_in){
 				{
 					int currTime = E_Sys_Milliseconds();
 					if (currTime-lastTouchBegan < 200) {
+                        // Double click
 						Log_Printf("Ghost button down down down down down!");
 						touches[BUTTON_GHOST].down = 1;
 					}
@@ -149,6 +152,13 @@ void IO_PushEvent(io_event_s* event_in){
 					touches[BUTTON_FIRE].down = 1;
 				}
 				
+                if (event.type == IO_EVENT_ALT_BEGAN) {
+                    // This is when say left click is performed
+                    touches[BUTTON_ALT_FIRE].down = 1;
+                }
+                
+                
+                Log_Printf("event type %d touches alt fire %d \n",event.type,touches[BUTTON_ALT_FIRE].down);
 				
 			}
 			

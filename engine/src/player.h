@@ -115,7 +115,10 @@ extern unsigned short pContraBulletIndices[(MAX_PLAYER_BULLETS * 6 + 6)*MAX_NUM_
 extern xf_colorless_sprite_t pContraBulletVertices[(MAX_PLAYER_BULLETS*4+4)*MAX_NUM_PLAYERS];
 extern int numPContraBulletsIndices;
 
+struct bullet_t;
+
 typedef void (*bulletUpdatePosition_t)(struct bullet_t*);
+typedef void (*bulletUpdateSprite_t)(struct bullet_t*,struct xf_colorless_sprite_t*,int i);
 
 typedef struct bullet_t
 {	
@@ -132,6 +135,9 @@ typedef struct bullet_t
 	uchar type;
 
 	bulletUpdatePosition_t updatePosition;
+    bulletUpdateSprite_t   updateSprite;
+    
+    short direction;
 	
 } bullet_t ;
 
@@ -179,24 +185,6 @@ typedef struct ghost_t
 	unsigned int targetUniqueId ;
 	
 } ghost_t;
-
-typedef struct contra_bullet_t {
-    
-    short ss_boudaries[4];
-    
-	short spawnedY;
-	short spawnedX;
-	
-	int expirationTime;
-	int spawnedTime;
-	
-	short energy;
-	
-	bulletUpdatePosition_t updatePosition;
-	short direction;
-    
-} contra_bullet_t;
-
 
 extern texture_t ghostTexture;
 
@@ -261,9 +249,9 @@ typedef struct player_t
 	ghost_t ghosts[GHOSTS_NUM];
 	int nextGhostFireTime;
     
-    int nextContraBulletFireTime;
-	uchar nextContraBulletSlotIndice;
-    contra_bullet_t contraBullets[MAX_PLAYER_BULLETS];
+    //int nextContraBulletFireTime;
+	//uchar nextContraBulletSlotIndice;
+    //contra_bullet_t contraBullets[MAX_PLAYER_BULLETS];
     
 
 } player_t ;
@@ -287,6 +275,7 @@ void P_PrepareBulletSprites(void);
 
 void P_FireOneBullet(player_t* player);
 void P_FireTwoBullet(player_t* player);
+void P_FireContraBullet(player_t* player);
 
 void P_UpdateBullets(player_t* player);
 
@@ -302,10 +291,11 @@ void P_PreparePointerSprites(void);
 
 void PL_RenderPlayerPointers(void);
 
-void P_UpdateContraBullets(player_t* player);
-
 void BulletUpdatePositionLinear(bullet_t* bullet);
-void BulletUpdatePositionRadial(contra_bullet_t* bullet);
+void BulletUpdatePositionRadial(bullet_t* bullet);
+
+void BulletUpdateSpriteLinear(bullet_t* bullet,xf_colorless_sprite_t* bulSprite,int i);
+void BulletUpdateSpriteRadial(bullet_t* bullet,xf_colorless_sprite_t* bulSprite,int i);
 
 
 

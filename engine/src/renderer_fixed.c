@@ -756,26 +756,26 @@ void RenderPlayersBulletsF(void)
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	
 	SetTextureF(bulletConfig.bulletTexture.textureId);
-/*
+
 	//Player bullets
 	glVertexPointer(  2, GL_SHORT,  sizeof(xf_colorless_sprite_t), pBulletVertices->pos);
 	glTexCoordPointer(2, GL_SHORT,  sizeof(xf_colorless_sprite_t), pBulletVertices->text);
     glDrawElements (GL_TRIANGLES, numPBulletsIndices, GL_UNSIGNED_SHORT,bulletIndices);
     STATS_AddTriangles(numPBulletsIndices/3);
-*/	
+	
 	//Also render enemy bullets
 	glVertexPointer(  2, GL_SHORT,  sizeof(xf_colorless_sprite_t), partLib.ss_vertices[0].pos);
 	glTexCoordPointer(2, GL_SHORT,  sizeof(xf_colorless_sprite_t), partLib.ss_vertices[0].text);			
 	glDrawElements (GL_TRIANGLES, partLib.num_indices, GL_UNSIGNED_SHORT,partLib.indices);
 	STATS_AddTriangles(partLib.num_indices/3);
-
+/*
     // Render contra style bullets if necessart
     glVertexPointer(  2, GL_SHORT,  sizeof(xf_colorless_sprite_t), pContraBulletVertices->pos);
 	glTexCoordPointer(2, GL_SHORT,  sizeof(xf_colorless_sprite_t), pContraBulletVertices->text);
 	glDrawElements (GL_TRIANGLES, numPContraBulletsIndices, GL_UNSIGNED_SHORT,pContraBulletIndices);
 	STATS_AddTriangles(numPContraBulletsIndices/3);
+    */
  
-
 }
 
 

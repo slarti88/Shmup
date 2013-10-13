@@ -364,15 +364,6 @@ void Spawn_BulletParticules(bullet_t* bullet, int type)
 	FX_GetExplosion(ss_position, type, 0.35f,0.0f);
 }
 
-void Spawn_ContraBulletParticules(contra_bullet_t* bullet,int type) {
-    
-    vec2_t ss_position;
-	ss_position[Y] = bullet->ss_boudaries[UP] / (float)SS_H;
-	ss_position[X] = ( bullet->ss_boudaries[LEFT]+bulletConfig.halfWidth ) / (float)SS_H;
-	FX_GetExplosion(ss_position, type, 0.35f,0.0f);
-    
-}
-
 void Spawn_GhostParticules(ghost_t* ghost)
 {
 	
@@ -450,8 +441,10 @@ void COLL_CheckEnemies(void)
 {
 	enemy_t* enemy;
 	player_t* player;
-	contra_bullet_t* bullets;
-	ghost_t* ghost;
+    
+	bullet_t* bullets;
+	
+    ghost_t* ghost;
 	const short* ss_bullet_boudaries;
 	const short* ss_enemy_boudaries;
 	int i,j;
@@ -470,8 +463,8 @@ void COLL_CheckEnemies(void)
 		for(i=0 ; i < numPlayers ; i++)
 		{
 			player = &players[i];
-			bullets = player->contraBullets;
-			
+			bullets = player->bullets;
+            
 			for (j=0; j< MAX_PLAYER_BULLETS; j++) 
 			{
 				if (bullets[j].expirationTime < simulationTime)
@@ -497,9 +490,8 @@ void COLL_CheckEnemies(void)
 				
 				if (bullets[j].energy <= 0)
 				{
-
 					bullets[j].expirationTime = simulationTime ;
-					Spawn_ContraBulletParticules(&bullets[j],i);
+					Spawn_BulletParticules(&bullets[j],i);
 				}
 				
 				if (enemy->energy <= 0)

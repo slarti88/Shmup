@@ -167,6 +167,17 @@ int initialized = 0;
 
 }
 
+- (void) scrollWheel:(NSEvent *)theEvent {
+    
+    io_event_s event;
+    
+    event.type = IO_EVENT_SCROLL;
+    event.position[X] = theEvent.deltaX ;
+    event.position[Y] = theEvent.deltaY ;;
+    event.previousPosition[X] = 0;
+    event.previousPosition[Y] = 0;
+    IO_PushEvent(&event);    
+}
 
 #include "menu.h"
 #pragma mark    -   NSResponder

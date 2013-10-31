@@ -253,6 +253,11 @@ void COM_ConvertLocalTouchsToCommands(void)
         command->buttons |= BUTTON_ALT_FIRE_PRESSED;
     }
     
+    if (touches[BUTTON_ROTATE].down) {
+        command->rotation = touches[BUTTON_ROTATE].dist[Y];
+        touches[BUTTON_ROTATE].down = 0;
+    }
+    
 	//if(command->time != simulationTime)
 	//	commandsBuffers[controlledPlayer].numCommands = 0;
 	//Need to copy cmd to send to netchannel.c
@@ -478,8 +483,6 @@ void COM_ExecCommand(command_t* command)
 			if (players[pId].respawnCounter < 0 )
 				return;
 			
-			//Log_Printf("engine.showFingers=%d\n",engine.showFingers);
-			
 			if (engine.showFingers)
 				COM_PrepareFingerSprites(command);
 			
@@ -506,8 +509,9 @@ void COM_ExecCommand(command_t* command)
 			if (player->autopilot.enabled)
 				return;
 			
-			
-			
+			Log_Printf("command rotation %f",command->rotation);
+            
+			player->rotation += command->rotation;
 			player->ss_position[X] += command->delta[X];
 			player->ss_position[Y] += command->delta[Y];
 			
@@ -584,7 +588,6 @@ void COM_Update(void)
 		return;
 	
 	COM_ConvertLocalTouchsToCommands();
-	
 	
 	COM_UpdateGhostButton();
 	

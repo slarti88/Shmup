@@ -197,6 +197,8 @@ void P_ResetPlayer(int i)
 		ghost = &player->ghosts[k];
 		ghost->timeCounter = GHOST_TTL_MS+1;
 	}
+    
+    player->rotation = 0;
 	
 	
 	//Reset stats
@@ -567,10 +569,37 @@ void P_FireTwoBullet(player_t* player)
 		0   1	0	0
 		0	0	0	1
  */
+
+// This seems to be for a rotation of 90 degrees in XY plane, lets change it to 0
+// The original matrix is rotating -90 degrees about X according to this matrix
+// The plane is probably facing the -ve z axis
+// Coordinate systems in OpenGL is right handed
+/*
+ 
+        1       0       0       0
+        0       cos     sin     0
+        0       -sin    cos     0
+        0       0       0       1
+ 
+ 
+        cos     0       sin     0
+        0       1       0       0
+        -sin    0       cos     0
+        0       0       0       1
+ 
+ */
+
 matrix_t fromAboveRotation = {1 , 0  , 0 , 0,
 							  0 , 0  , 1 , 0,
 							  0 , -1 , 0 , 0,
-							  0 , 0  , 0 , 1,} ; 
+							  0 , 0  , 0 , 1,} ;
+
+/*
+matrix_t fromAboveRotation = {1 , 0  , 0 , 0,
+                              0 , 0  , -1 , 0,
+                              0 , 1 , 0 , 0,
+                              0 , 0  , 0 , 1} ;
+*/
 
 void P_Update(void)
 {
@@ -646,8 +675,17 @@ void P_Update(void)
 			
 			//UPDATE MATRIX
 			
+            //player->rotation += .01;
+            
+            matrix_t temp_matrix;
+            matrix_t yAxisRotation = {cosf(player->rotation) , 0, sinf(player->rotation) , 0,
+                0 , 1, 0 , 0,
+                -1*sinf(player->rotation) , 0 ,cosf(player->rotation) , 0,
+                0 , 0, 0,  1};
+            
 			//Rotation part
-			matrix_multiply(cameraInvRot, fromAboveRotation, playerEntity->matrix);
+			matrix_multiply(cameraInvRot, fromAboveRotation, temp_matrix);
+            matrix_multiply(temp_matrix, yAxisRotation, playerEntity->matrix);
 			
 			//Translation part
 			vectorScale(camera.forward,distanceZFromCamera,translationForwardTransform);

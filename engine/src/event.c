@@ -462,9 +462,8 @@ void EV_Update(void)
 	//if (nextEvent != NULL)
 	//	Log_Printf("next event t=%d.\n",nextEvent->time);
 	
-	while (nextEvent != NULL && nextEvent->time < simulationTime) 
+	while (nextEvent != NULL && nextEvent->time < simulationTime)
 	{
-		//Log_Printf("Triggering event t=%d type: %d.\n",nextEvent->time,nextEvent->type);
 		eventToFunction[nextEvent->type](nextEvent);
 		
 		toDelete = nextEvent;

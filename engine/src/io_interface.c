@@ -17,10 +17,6 @@ void IO_Init(void){
 
 void IO_PushEvent(io_event_s* event_in){
 	
-
-
-	
-	
 	touch_t *touch, *t2;
 	int		minDist = 64 * 64  ;	// allow up to 64 unit moves to be drags
 	int		minIndex = -1;
@@ -99,7 +95,16 @@ void IO_PushEvent(io_event_s* event_in){
 	}
 	else
 	{
-		
+	
+        // If the event type is scroll then we do not process position and previous position in the normal way
+        if (event.type == IO_EVENT_SCROLL){
+            
+            touches[BUTTON_ROTATE].down = 1;
+            touches[BUTTON_ROTATE].dist[X] = event.position[X];
+            touches[BUTTON_ROTATE].dist[Y] = event.position[Y];
+            return;
+            
+        }
 		
 		
 			//CGPoint touchLocation = [myTouch locationInView:nil];
@@ -156,9 +161,6 @@ void IO_PushEvent(io_event_s* event_in){
                     // This is when say left click is performed
                     touches[BUTTON_ALT_FIRE].down = 1;
                 }
-                
-                
-                Log_Printf("event type %d touches alt fire %d \n",event.type,touches[BUTTON_ALT_FIRE].down);
 				
 			}
 			

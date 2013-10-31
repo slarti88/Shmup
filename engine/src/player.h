@@ -249,6 +249,8 @@ typedef struct player_t
 	ghost_t ghosts[GHOSTS_NUM];
 	int nextGhostFireTime;
     
+    float rotation;
+    
     //int nextContraBulletFireTime;
 	//uchar nextContraBulletSlotIndice;
     //contra_bullet_t contraBullets[MAX_PLAYER_BULLETS];

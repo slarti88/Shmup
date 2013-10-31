@@ -39,6 +39,7 @@
 #define BUTTON_FIRE  1
 #define BUTTON_GHOST 2
 #define BUTTON_ALT_FIRE 3
+#define BUTTON_ROTATE 4
 
 
 #define BUTTON_FIRE_PRESSED 0x1
@@ -57,6 +58,7 @@ typedef struct command_t
 	vec2_t delta;
 	uchar buttons;
 	uchar playerId;
+    float rotation;
 	
 } command_t;
 

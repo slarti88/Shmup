@@ -509,8 +509,6 @@ void COM_ExecCommand(command_t* command)
 			if (player->autopilot.enabled)
 				return;
 			
-			Log_Printf("command rotation %f",command->rotation);
-            
 			player->rotation += command->rotation;
 			player->ss_position[X] += command->delta[X];
 			player->ss_position[Y] += command->delta[Y];

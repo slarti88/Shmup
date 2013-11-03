@@ -93,15 +93,6 @@ typedef struct player_bullet_config_t
 
 extern player_bullet_config_t bulletConfig;
 
-/*
-typedef struct playerBulletSprite_t
-{
-	short int pos[2];
-	short int text[2];
-	
-} playerBulletSprite_t;
-*/
-
 //Variable storing players bullet AND firing flash (in front of the player ship)
 // Vertices needed is number_of_players * number_of_bullets * 4 +  number_of_players * 4 = number_of_players * (number_of_bullets*4 +4)
 // Indices needed is number_of_players * number_of_bullets * 6 + number_of_players * 6 =   number_of_players * (number_of_bullets * 6 + 6)
@@ -123,6 +114,7 @@ typedef void (*bulletUpdateSprite_t)(struct bullet_t*,struct xf_colorless_sprite
 typedef struct bullet_t
 {	
 	short ss_boudaries[4];
+    short collision_boudaries[4];
 	
 	short spawnedY;
 	short spawnedX;
@@ -137,7 +129,11 @@ typedef struct bullet_t
 	bulletUpdatePosition_t updatePosition;
     bulletUpdateSprite_t   updateSprite;
     
+    vec2short_t playerPosition;
+    
     short direction;
+    
+    float rotation;
 	
 } bullet_t ;
 

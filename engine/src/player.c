@@ -351,7 +351,8 @@ void BulletUpdatePositionLinear(bullet_t* bullet){
 
 	t = (simulationTime - bullet->spawnedTime)/ (float)bulletConfig.ttl ;				
 	bulletHeight = bullet->spawnedY +  t* (bulletConfig.distPerLifepsan);
-	bullet->ss_boudaries[UP] = bulletHeight + bulletConfig.halfHeight;
+    
+    bullet->ss_boudaries[UP] = bulletHeight + bulletConfig.halfHeight;
 	bullet->ss_boudaries[DOWN] = bulletHeight - bulletConfig.halfHeight;
     
 }
@@ -406,7 +407,86 @@ void BulletUpdateSpriteLinear(bullet_t* bullet, xf_colorless_sprite_t* bulSprite
     
     bulSprite[3].text[X] = i*(16.0f/128*SHRT_MAX) + (16.0f/128*SHRT_MAX);
     bulSprite[3].text[Y] = bullet->type*(32.0f/128*SHRT_MAX)+32.0f/128*SHRT_MAX;
-    //bulSprite++;
+    
+    // Note -- These are column major again
+    
+    // Translation matrix
+    
+    float deltaX = bullet->playerPosition[0];
+    float deltaY = bullet->playerPosition[1];
+    
+    matrix_t translateMat = {1,0,0,0,
+                             0,1,0,0,
+                             0,0,1,0,
+                             -1*deltaX,-1*deltaY,0,1};
+
+   matrix_t translateNegativeMat = {1,0,0,0,
+                            0,1,0,0,
+                            0,0,1,0,
+                            deltaX,deltaY,0,1};
+    
+    matrix_t rotateMat = {cosf(bullet->rotation),-sinf(bullet->rotation),0,0,
+                          sinf(bullet->rotation),cosf(bullet->rotation),0,0,
+                          0,0,1,0,
+                          0,0,0,1};
+    
+    matrix_t identityMat = {1,0,0,0,
+                            0,1,0,0,
+                            0,0,1,0,
+                            0,0,0,1};
+    
+    matrix_t transformMat;
+    matrix_multiply(rotateMat,translateMat, transformMat);
+    
+    vec4_t newPosition;
+    vec4_t bulletPosition = {0,0,0,1};
+        
+    bulletPosition[0] = bulSprite[0].pos[X];bulletPosition[1] = bulSprite[0].pos[Y];
+    matrix_multiplyVertexByMatrix(bulletPosition,transformMat, newPosition);
+    matrix_multiplyVertexByMatrix(newPosition, translateNegativeMat, newPosition);
+    
+    bulSprite[0].pos[X] = newPosition[0];bulSprite[0].pos[Y] = newPosition[1];
+    
+    bulletPosition[0] = bulSprite[1].pos[X];bulletPosition[1] = bulSprite[1].pos[Y];
+    matrix_multiplyVertexByMatrix(bulletPosition,transformMat, newPosition);
+    matrix_multiplyVertexByMatrix(newPosition, translateNegativeMat, newPosition);
+    
+    bulSprite[1].pos[X] = newPosition[0];bulSprite[1].pos[Y] = newPosition[1];
+    
+    bulletPosition[0] = bulSprite[2].pos[X];bulletPosition[1] = bulSprite[2].pos[Y];
+    matrix_multiplyVertexByMatrix(bulletPosition,transformMat, newPosition);
+    matrix_multiplyVertexByMatrix(newPosition, translateNegativeMat, newPosition);
+    bulSprite[2].pos[X] = newPosition[0];bulSprite[2].pos[Y] = newPosition[1];
+    
+    bulletPosition[0] = bulSprite[3].pos[X];bulletPosition[1] = bulSprite[3].pos[Y];
+    matrix_multiplyVertexByMatrix(bulletPosition,transformMat, newPosition);
+    matrix_multiplyVertexByMatrix(newPosition, translateNegativeMat, newPosition);
+    bulSprite[3].pos[X] = newPosition[0];bulSprite[3].pos[Y] = newPosition[1];
+    
+    // Max of left-up and right up
+    // Right handed coordinate system so y increases upwards and x increases leftwards when looking towards +ve z direction
+    
+    bullet->collision_boudaries[UP] = -SS_H;
+    bullet->collision_boudaries[DOWN] =  SS_H;
+    bullet->collision_boudaries[LEFT] = SS_W;
+    bullet->collision_boudaries[RIGHT] = -SS_W;
+    
+    for (size_t i = 0; i < 4;i++) {
+        if (bulSprite[i].pos[X] > bullet->collision_boudaries[RIGHT]) {
+            bullet->collision_boudaries[RIGHT] = bulSprite[i].pos[X];
+        }
+        if (bulSprite[i].pos[X] < bullet->collision_boudaries[LEFT]) {
+            bullet->collision_boudaries[LEFT] = bulSprite[i].pos[X];
+        }
+        
+        if (bulSprite[i].pos[Y] > bullet->collision_boudaries[UP]) {
+            bullet->collision_boudaries[UP] = bulSprite[i].pos[Y];
+        }
+        if (bulSprite[i].pos[Y] < bullet->collision_boudaries[DOWN]) {
+            bullet->collision_boudaries[DOWN] = bulSprite[i].pos[Y];
+        }
+        
+    }
     
 }
 
@@ -458,6 +538,9 @@ void P_FireBullet(player_t* player,float deltaX, float deltaY)
     bullet->spawnedY = spawningPos[Y];
     bullet->spawnedX = spawningPos[X];
 
+    bullet->playerPosition[0] = player->ss_position[X]*SS_W;
+    bullet->playerPosition[1] = player->ss_position[Y]*SS_H;
+    
     bullet->spawnedTime = simulationTime;
 
     //Generate ss_boudaries
@@ -465,6 +548,12 @@ void P_FireBullet(player_t* player,float deltaX, float deltaY)
     bullet->ss_boudaries[DOWN] =  spawningPos[Y] - bulletConfig.halfHeight;
     bullet->ss_boudaries[LEFT] =  spawningPos[X] - bulletConfig.halfWidth;
     bullet->ss_boudaries[RIGHT]=  spawningPos[X] + bulletConfig.halfWidth;
+    
+    //Generate ss_boudaries
+    bullet->collision_boudaries[UP]   =  spawningPos[Y] + bulletConfig.halfHeight;
+    bullet->collision_boudaries[DOWN] =  spawningPos[Y] - bulletConfig.halfHeight;
+    bullet->collision_boudaries[LEFT] =  spawningPos[X] - bulletConfig.halfWidth;
+    bullet->collision_boudaries[RIGHT]=  spawningPos[X] + bulletConfig.halfWidth;
 
     bullet->energy = BULLET_DEFAULT_ENERGY;
 
@@ -479,7 +568,8 @@ void P_FireBullet(player_t* player,float deltaX, float deltaY)
     player->firingUpTo = simulationTime+ bulletConfig.msBetweenBullets;
 
     bullet->expirationTime = simulationTime + bulletConfig.ttl ;
-  // Log_Printf("newbslot=%u\n",player->nextBulletSlotIndice);
+    
+    bullet->rotation = player->rotation;
 }
 
 
@@ -521,6 +611,8 @@ void P_FireContraBullet(player_t* player){
         
         bullet->updatePosition = BulletUpdatePositionRadial;
         bullet->updateSprite = BulletUpdateSpriteRadial;
+        
+        bullet->rotation = player->rotation;
 	}
     
     player->nextBulletFireTime = simulationTime + CONTRA_MS_BETWEEN_BULLETS;
@@ -572,7 +664,7 @@ void P_FireTwoBullet(player_t* player)
 
 // This seems to be for a rotation of 90 degrees in XY plane, lets change it to 0
 // The original matrix is rotating -90 degrees about X according to this matrix
-// The plane is probably facing the -ve z axis
+// The ship is probably facing the -ve z axis
 // Coordinate systems in OpenGL is right handed
 /*
  
@@ -675,8 +767,6 @@ void P_Update(void)
 			
 			//UPDATE MATRIX
 			
-            //player->rotation += .01;
-            
             matrix_t temp_matrix;
             matrix_t yAxisRotation = {cosf(player->rotation) , 0, sinf(player->rotation) , 0,
                 0 , 1, 0 , 0,

@@ -470,7 +470,7 @@ void COLL_CheckEnemies(void)
 				if (bullets[j].expirationTime < simulationTime)
 					continue;
 				
-				ss_bullet_boudaries= bullets[j].ss_boudaries;
+				ss_bullet_boudaries= bullets[j].collision_boudaries;
 				
 				if (ss_enemy_boudaries[DOWN]  >  ss_bullet_boudaries[UP]    ||
 					ss_enemy_boudaries[UP]    <  ss_bullet_boudaries[DOWN]  ||

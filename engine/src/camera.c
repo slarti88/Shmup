@@ -103,12 +103,6 @@ void CAM_Update(void)
 	if (!camera.playing)
 		return;
 	
-	
-	//Log_Printf("CAM_Update\n");
-	//Log_Printf("camera.currentFrame->next=%d\n",camera.currentFrame->next);
-	//Log_Printf("camera.currentFrame->next->time=%d\n",camera.currentFrame->next->time);
-	//Log_Printf("simulationTime=%d\n",simulationTime);
-
 	while (camera.currentFrame->next != NULL && camera.currentFrame->next->time <= simulationTime)
 	{
 		//Update vis_set if not already done, take into account key frame_update
@@ -121,8 +115,6 @@ void CAM_Update(void)
 		camera.currentFrame = camera.currentFrame->next;
 		CAM_FreeCameraFrame(toDelete);
 	}	
-		
-	//Log_Printf("frame t=%d.\n",camera.currentFrame->time);
 	
 	if (camera.currentFrame->next == 0)
 		return;
@@ -137,14 +129,7 @@ void CAM_Update(void)
 		
 	//Transforme quat to matrix and set it as orientation
 	Quat_ConvertToMat3x3(interpolatedOrientationMatrix, interpolatedQuaterion);
-		
-	
-	//Log_Printf("Camera pos: [%.2f,%.2f,%.2f].\n",camera.position[0],camera.position[1],camera.position[2]);
-	//Log_Printf("Camera orientation matrix:\n");
-	//matrix_print3x3(interpolatedOrientationMatrix);
-	//Log_Printf("Camera orientation quaternion: [%.5f,%.5f,%.5f,%.5f]\n",interpolatedQuaterion[0],interpolatedQuaterion[1],interpolatedQuaterion[2],interpolatedQuaterion[3]);
-
-	
+			
 	camera.right[0] = interpolatedOrientationMatrix[0];
 	camera.right[1] = interpolatedOrientationMatrix[1];
 	camera.right[2] = interpolatedOrientationMatrix[2];
